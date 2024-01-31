@@ -3,3 +3,13 @@ pygame-gui==0.6.5
 pygame==2.0.3
 numpy
 scipy
+sympy
+matplotlib
+CCS
+seaborn
+statsmodels
+optcutfreq
+psd2
+rise
+tnorma
+detecta
