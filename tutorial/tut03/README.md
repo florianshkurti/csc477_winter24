@@ -13,9 +13,4 @@ jupyter nbextension enable --py --sys-prefix widgetsnbextension
 ## To Do
 Please navigate to `kinematics.py` and search for `TODO`.
 
-Once you finish your implementation, please run 
-```
-python3 main.py
-```
-
 
