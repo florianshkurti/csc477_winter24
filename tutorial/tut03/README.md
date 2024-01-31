@@ -4,13 +4,9 @@
 ## Setup the environment
 ```
 pip install -r requirement.txt
-
-
-jupyter nbextension enable --py --sys-prefix bqplot
-jupyter nbextension enable --py --sys-prefix widgetsnbextension
 ```
 
 ## To Do
-Please navigate to `kinematics.py` and search for `TODO`.
+Please navigate to `kinematics.ipynb` and search for `TODO`.
 
 
