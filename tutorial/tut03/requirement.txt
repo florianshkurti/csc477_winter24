@@ -1,0 +1,5 @@
+bqplot
+pygame-gui==0.6.5
+pygame==2.0.3
+numpy
+scipy

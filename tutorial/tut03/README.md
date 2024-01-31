@@ -1,9 +1,13 @@
-# CSC477 Tutorial #2 - Artificial Potential Field
+# CSC477 Tutorial #2 - Forward and inverse inematics
 The potential field planner is adapted from the concept of a charged particle travelling through a charged field. The goal postion emits a attractive force, and the obstacles emit a repulsive force. We can emulate this behaviour by creating a artificial potential field that attracts the robot towards the goal. The goal postion emits a strong attractive field, and each obstacle emits a repulsive field. By following the sum of all fields at each position, we can construct a path towards the goal postion.
 
 ## Setup the environment
 ```
 pip install -r requirement.txt
+
+
+jupyter nbextension enable --py --sys-prefix bqplot
+jupyter nbextension enable --py --sys-prefix widgetsnbextension
 ```
 
 ## To Do
