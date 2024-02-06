@@ -7,13 +7,12 @@ import matplotlib.pyplot as plt
 from scipy.spatial.transform import Rotation as Rot
 import matplotlib.patches as patches
 from tqdm import tqdm
+import imageio
 
 sys.path.append(
     os.path.dirname(os.path.abspath(__file__))
     + "/../../Sampling_based_Planning/"
 )
-
-# from . import env, plotting, utils
 import env, plotting, utils
 
 
@@ -73,24 +72,17 @@ class IRrtStar:
 
     def planning(self):
         theta, dist, x_center, C, x_best = self.init()
-        c_best = np.inf
+        c_best, framename = np.inf, []
 
         for k in range(self.iter_max):
-            # print(f'planning iteration {k}')
             if self.X_soln:
-                # print('x_soln')
                 cost = {node: self.Cost(node) for node in self.X_soln}
                 x_best = min(cost, key=cost.get)
                 c_best = cost[x_best]
 
             x_rand = self.Sample(c_best, dist, x_center, C)
-
-            # print('end of Sample')
             x_nearest = self.Nearest(self.V, x_rand)
-            # print('end of Nearest')
             x_new = self.Steer(x_nearest, x_rand)
-            # print('end of Steer')
-            # print('hi')
 
             if x_new and not self.utils.is_collision(x_nearest, x_new):
                 X_near = self.Near(self.V, x_new)
@@ -118,23 +110,33 @@ class IRrtStar:
                         # if new_cost < c_best:
                         #     c_best = new_cost
                         #     x_best = x_new
-                # print('hello')
-            # print('out of if')
             if k % 20 == 0:
                 self.animation(
                     x_center=x_center, c_best=c_best, dist=dist, theta=theta
                 )
-
-        # print('end of planning iteration')
+                fn = f"results/{k}.png"
+                plt.savefig(fn)
+                framename.append(fn)
 
         self.path = self.ExtractPath(x_best)
-
-        # print('planning finished')
 
         self.animation(x_center=x_center, c_best=c_best, dist=dist, theta=theta)
         plt.plot([x for x, _ in self.path], [y for _, y in self.path], "-r")
         plt.pause(0.01)
-        plt.show()
+        fn = f"results/{k}.png"
+        plt.savefig(fn)
+        framename.append(fn)
+
+
+        frames = []
+        for fn in framename:
+            frames.append(imageio.v2.imread(fn))
+
+        imageio.mimsave("informed_rrt_star_test.gif", frames, fps=5)
+
+        for fn in framename:
+            os.remove(fn)
+        return
 
     def Steer(self, x_start, x_goal):
         dist, theta = self.get_distance_and_angle(x_start, x_goal)
@@ -290,19 +292,14 @@ class IRrtStar:
             "key_release_event",
             lambda event: [exit(0) if event.key == "escape" else None],
         )
-        # print('plotting')
         for node in tqdm(self.V):
             if node.parent:
                 plt.plot([node.x, node.parent.x], [node.y, node.parent.y], "-g")
-
-            # print('plotting loop')
 
         if c_best != np.inf:
             self.draw_ellipse(x_center, c_best, dist, theta)
 
         # plt.pause(0.01)
-        # print('end of plotting')
-
 
     def plot_grid(self, name):
 
@@ -345,8 +342,6 @@ class IRrtStar:
 
     @staticmethod
     def draw_ellipse(x_center, c_best, dist, theta):
-        # print('start of draw ellipse')
-
         a = math.sqrt(c_best**2 - dist**2) / 2.0
         b = c_best / 2.0
         angle = math.pi / 2.0 - theta
@@ -362,8 +357,6 @@ class IRrtStar:
         py = np.array(fx[1, :] + cy).flatten()
         plt.plot(cx, cy, ".b")
         plt.plot(px, py, linestyle="--", color="darkorange", linewidth=2)
-
-        # print('end of draw ellipse')
         return
 
 

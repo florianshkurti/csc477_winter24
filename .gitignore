@@ -160,4 +160,5 @@ cython_debug/
 #.idea/
 
 *_sol.*
+*_test.*
 # kinematics_sol.ipynb

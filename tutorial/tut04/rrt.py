@@ -8,7 +8,6 @@ sys.path.append(
     + "/../../Sampling_based_Planning/"
 )
 
-# from . import env, plotting, utils
 import env, plotting, utils
 
 
