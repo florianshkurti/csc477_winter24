@@ -1,8 +1,3 @@
-"""
-utils for collision check
-@author: huiming zhou
-"""
-
 import math
 import numpy as np
 import os
