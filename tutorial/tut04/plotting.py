@@ -4,11 +4,6 @@ import os
 import sys
 from tqdm import tqdm
 import imageio
-
-# sys.path.append(
-#     os.path.dirname(os.path.abspath(__file__))
-#     + "/../../Sampling_based_Planning/"
-# )
 import env
 
 

@@ -8,11 +8,6 @@ from scipy.spatial.transform import Rotation as Rot
 import matplotlib.patches as patches
 from tqdm import tqdm
 import imageio
-
-# sys.path.append(
-#     os.path.dirname(os.path.abspath(__file__))
-#     + "/../../Sampling_based_Planning/"
-# )
 import env, plotting, utils
 
 
@@ -72,6 +67,8 @@ class IRrtStar:
         c_best, framename = np.inf, []
 
         for k in range(self.iter_max):
+
+
             if self.X_soln:
                 cost = {node: self.Cost(node) for node in self.X_soln}
                 x_best = min(cost, key=cost.get)
@@ -108,31 +105,35 @@ class IRrtStar:
                         #     c_best = new_cost
                         #     x_best = x_new
             if k % 20 == 0:
+                # plotting -----------------------------------------------
                 self.animation(
                     x_center=x_center, c_best=c_best, dist=dist, theta=theta
                 )
                 fn = f"results/{k}.png"
                 plt.savefig(fn)
                 framename.append(fn)
+                # --------------------------------------------------------
 
         self.path = self.ExtractPath(x_best)
 
+
+        # plotting -------------------------------------------------------
         self.animation(x_center=x_center, c_best=c_best, dist=dist, theta=theta)
         plt.plot([x for x, _ in self.path], [y for _, y in self.path], "-r")
-        plt.pause(0.01)
+        # plt.pause(0.01)
         fn = f"results/{k}.png"
         plt.savefig(fn)
         framename.append(fn)
-
 
         frames = []
         for fn in framename:
             frames.append(imageio.v2.imread(fn))
 
         imageio.mimsave("informed_rrt_star_test.gif", frames, fps=5)
-
         for fn in framename:
             os.remove(fn)
+        # ----------------------------------------------------------------
+        
         return
 
     def Steer(self, x_start, x_goal):
@@ -200,7 +201,6 @@ class IRrtStar:
 
     def SampleFreeSpace(self):
         delta = self.delta
-
         if np.random.random() > self.goal_sample_rate:
             return Node(
                 (
@@ -244,7 +244,6 @@ class IRrtStar:
             @ np.diag([1.0, 1.0, np.linalg.det(U) * np.linalg.det(V_T.T)])
             @ V_T
         )
-
         return C
 
     @staticmethod
@@ -298,7 +297,6 @@ class IRrtStar:
         # plt.pause(0.01)
 
     def plot_grid(self, name):
-
         for ox, oy, w, h in self.obs_boundary:
             self.ax.add_patch(
                 patches.Rectangle(
