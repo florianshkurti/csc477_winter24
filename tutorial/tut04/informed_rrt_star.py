@@ -31,8 +31,7 @@ class IRrtStar:
         self.x_start, self.x_goal = Node(x_start), Node(x_goal)
         self.step_len = step_len
         self.goal_sample_rate = goal_sample_rate
-        self.search_radius = search_radius
-        self.iter_max = iter_max
+        self.search_radius, self.iter_max = search_radius, iter_max
 
         self.env = env.Env()
         self.plotting = plotting.Plotting(x_start, x_goal)
@@ -64,20 +63,20 @@ class IRrtStar:
 
     def planning(self):
         theta, dist, x_center, C, x_best = self.init()
-        c_best, framename = np.inf, []
+        c_best, framename, frames = np.inf, [], []
 
         for k in range(self.iter_max):
 
-
+            # TODO ---------------------------------------------------
+            # find the lowest cost in X_soln
             if self.X_soln:
-                cost = {node: self.Cost(node) for node in self.X_soln}
-                x_best = min(cost, key=cost.get)
-                c_best = cost[x_best]
-
+                c_best = None
+            # ---------------------------------------------------------
             x_rand = self.Sample(c_best, dist, x_center, C)
             x_nearest = self.Nearest(self.V, x_rand)
             x_new = self.Steer(x_nearest, x_rand)
 
+            # check whether it's collision-free
             if x_new and not self.utils.is_collision(x_nearest, x_new):
                 X_near = self.Near(self.V, x_new)
                 c_min = self.Cost(x_nearest) + self.Line(x_nearest, x_new)
@@ -97,30 +96,28 @@ class IRrtStar:
                     if c_new < c_near:
                         x_near.parent = x_new
 
+                # TODO
+                # add x_new to X_soln
                 if self.InGoalRegion(x_new):
                     if not self.utils.is_collision(x_new, self.x_goal):
-                        self.X_soln.add(x_new)
-                        # new_cost = self.Cost(x_new) + self.Line(x_new, self.x_goal)
-                        # if new_cost < c_best:
-                        #     c_best = new_cost
-                        #     x_best = x_new
+                        pass
+                # --------------------------------------------------------
+
+            # plotting -----------------------------------------------
             if k % 20 == 0:
-                # plotting -----------------------------------------------
                 self.animation(
                     x_center=x_center, c_best=c_best, dist=dist, theta=theta
                 )
                 fn = f"results/{k}.png"
                 plt.savefig(fn)
                 framename.append(fn)
-                # --------------------------------------------------------
+            # --------------------------------------------------------
 
         self.path = self.ExtractPath(x_best)
-
 
         # plotting -------------------------------------------------------
         self.animation(x_center=x_center, c_best=c_best, dist=dist, theta=theta)
         plt.plot([x for x, _ in self.path], [y for _, y in self.path], "-r")
-        # plt.pause(0.01)
         fn = f"results/{k}.png"
         plt.savefig(fn)
         framename.append(fn)
@@ -128,12 +125,10 @@ class IRrtStar:
         frames = []
         for fn in framename:
             frames.append(imageio.v2.imread(fn))
+            os.remove(fn)
 
         imageio.mimsave("informed_rrt_star_test.gif", frames, fps=5)
-        for fn in framename:
-            os.remove(fn)
         # ----------------------------------------------------------------
-        
         return
 
     def Steer(self, x_start, x_goal):
@@ -287,14 +282,14 @@ class IRrtStar:
             "key_release_event",
             lambda event: [exit(0) if event.key == "escape" else None],
         )
-        for node in tqdm(self.V):
+        for node in (self.V):
             if node.parent:
                 plt.plot([node.x, node.parent.x], [node.y, node.parent.y], "-g")
 
         if c_best != np.inf:
             self.draw_ellipse(x_center, c_best, dist, theta)
 
-        # plt.pause(0.01)
+        return
 
     def plot_grid(self, name):
         for ox, oy, w, h in self.obs_boundary:
@@ -344,7 +339,6 @@ class IRrtStar:
         t = np.arange(0, 2 * math.pi + 0.1, 0.1)
         x = [a * math.cos(it) for it in t]
         y = [b * math.sin(it) for it in t]
-        # rot = Rot.from_euler("z", -angle).as_dcm()[0:2, 0:2]
         rot = Rot.from_euler("z", -angle).as_matrix()[0:2, 0:2]
         fx = rot @ np.array([x, y])
         px = np.array(fx[0, :] + cx).flatten()
