@@ -1,5 +1,13 @@
 # CSC477 Tutorial #4 - Informed RRT*
 
+<table>
+  <tr>
+    <td> <img src="assets/RRT_2D.gif"  alt="1"  ></td>
+    <td><img src="assets/RRT_STAR2_2D.gif" alt="2" ></td>
+    <td><img src="assets/INFORMED_RRT_STAR_2D3.gif" alt="2"></td>
+   </tr> 
+</table>
+
 In this tutorial, we are going to explore a variant of RRT, informed RRT*.
 
 
