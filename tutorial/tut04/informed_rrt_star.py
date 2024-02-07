@@ -33,8 +33,7 @@ class IRrtStar:
         search_radius,
         iter_max,
     ):
-        self.x_start = Node(x_start)
-        self.x_goal = Node(x_goal)
+        self.x_start, self.x_goal = Node(x_start), Node(x_goal)
         self.step_len = step_len
         self.goal_sample_rate = goal_sample_rate
         self.search_radius = search_radius
@@ -46,14 +45,12 @@ class IRrtStar:
 
         self.fig, self.ax = plt.subplots()
         self.delta = self.utils.delta
-        self.x_range = self.env.x_range
-        self.y_range = self.env.y_range
+        self.x_range, self.y_range = self.env.x_range, self.env.y_range
         self.obs_circle = self.env.obs_circle
         self.obs_rectangle = self.env.obs_rectangle
         self.obs_boundary = self.env.obs_boundary
 
-        self.V = [self.x_start]
-        self.X_soln = set()
+        self.V, self.X_soln = [self.x_start], set()
         self.path = None
 
     def init(self):
@@ -232,7 +229,6 @@ class IRrtStar:
     def InGoalRegion(self, node):
         if self.Line(node, self.x_goal) < self.step_len:
             return True
-
         return False
 
     @staticmethod
