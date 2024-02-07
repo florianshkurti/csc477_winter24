@@ -357,4 +357,5 @@ def main():
 
 
 if __name__ == "__main__":
+    os.makedirs('results')
     main()
