@@ -125,7 +125,7 @@ class IRrtStar:
         frames = []
         for fn in framename:
             frames.append(imageio.v2.imread(fn))
-            os.remove(fn)
+            # os.remove(fn)
 
         imageio.mimsave("informed_rrt_star_test.gif", frames, fps=5)
         # ----------------------------------------------------------------
@@ -357,4 +357,5 @@ def main():
 
 
 if __name__ == "__main__":
+    os.makedirs('results',exist_ok = True)
     main()
