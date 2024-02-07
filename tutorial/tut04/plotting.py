@@ -2,11 +2,13 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import os
 import sys
+from tqdm import tqdm
+import imageio
 
-sys.path.append(
-    os.path.dirname(os.path.abspath(__file__))
-    + "/../../Sampling_based_Planning/"
-)
+# sys.path.append(
+#     os.path.dirname(os.path.abspath(__file__))
+#     + "/../../Sampling_based_Planning/"
+# )
 import env
 
 
@@ -20,8 +22,8 @@ class Plotting:
 
     def animation(self, nodelist, path, name, animation=False):
         self.plot_grid(name)
-        self.plot_visited(nodelist, animation)
-        self.plot_path(path)
+        end_count, framename = self.plot_visited(nodelist, animation)
+        self.plot_path(path, end_count, framename)
 
     def animation_connect(self, V1, V2, path, name):
         self.plot_grid(name)
@@ -71,8 +73,8 @@ class Plotting:
     @staticmethod
     def plot_visited(nodelist, animation):
         if animation:
-            count = 0
-            for node in nodelist:
+            count, framename = 0, []
+            for idx, node in (enumerate(nodelist)):
                 count += 1
                 if node.parent:
                     plt.plot(
@@ -85,7 +87,11 @@ class Plotting:
                         ],
                     )
                     if count % 10 == 0:
-                        plt.pause(0.001)
+                        fn = f'results/{count}.png'
+                        plt.savefig(fn)
+                        framename.append(fn)
+
+            return count, framename
         else:
             for node in nodelist:
                 if node.parent:
@@ -124,10 +130,22 @@ class Plotting:
         plt.pause(0.01)
 
     @staticmethod
-    def plot_path(path):
+    def plot_path(path, end_count, framename):
         if len(path) != 0:
             plt.plot(
                 [x[0] for x in path], [x[1] for x in path], "-r", linewidth=2
             )
-            plt.pause(0.01)
-        plt.show()
+            # plt.pause(0.01)
+
+            fn = f'results/{end_count+10}.png'
+            plt.savefig(fn)
+            framename.append(fn)
+
+            frames = []
+            for fn in framename:
+                frames.append(imageio.v2.imread(fn))
+            imageio.mimsave("rrt_test.gif", frames, fps=5)
+
+            for fn in framename:
+                os.remove(fn)
+        # plt.show()

@@ -3,10 +3,10 @@ import sys
 import math
 import numpy as np
 
-sys.path.append(
-    os.path.dirname(os.path.abspath(__file__))
-    + "/../../Sampling_based_Planning/"
-)
+# sys.path.append(
+#     os.path.dirname(os.path.abspath(__file__))
+#     + "/../../Sampling_based_Planning/"
+# )
 
 import env, plotting, utils
 
@@ -119,7 +119,7 @@ def main():
 
     rrt = Rrt(x_start, x_goal, 0.5, 0.05, 10000)
     path = rrt.planning()
-
+    print('path')
     if path:
         rrt.plotting.animation(rrt.vertex, path, "RRT", True)
     else:
