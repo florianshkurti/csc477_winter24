@@ -4,10 +4,10 @@ In this tutorial, we are going to explore a variant of RRT, informed RRT*.
 
 
 ## Recap
-![alt text](image.png)
+![alt text](assets/image_rrtstar.png)
 
 ## RRT*
-![alt text](image-1.png)
+![alt text](assets/image-1.png)
 - `Near`: acquiring a set of nodes that closed to the current tree/graph
 - `CollisionFree`: checking whether the segment of two nodes exists in the current tree
 
