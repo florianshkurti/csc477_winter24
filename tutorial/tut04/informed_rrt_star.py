@@ -68,7 +68,7 @@ class IRrtStar:
         for k in range(self.iter_max):
 
             # TODO ---------------------------------------------------
-            # find the lowest cost in X_soln
+            # find the lowest cost in X_soln and update x_best
             if self.X_soln:
                 c_best = None
             # ---------------------------------------------------------
