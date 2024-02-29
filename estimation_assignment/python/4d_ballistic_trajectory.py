@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 from kalman_filter import KalmanFilter
 import numpy as np
 
@@ -35,12 +35,16 @@ def plot_mean_and_covariance(mean, Sigma):
     
 if __name__ == "__main__":
 
+
+    # TODO: write down below the discrete-time dynamics for the cannonball
+    # Assume delta_t is the resolution of each timestep
+    # Consult with the examples shown in the Kalman Filter lecture slides
     
     # Discrete dynamics:
-    #           px_{t+1} = px_t + delta_t*vx_t + 1/2*delta_t^2*w_x(t)
-    #           py_{t+1} = py_t + delta_t*vy_t + 1/2*delta_t^2*w_y(t) - 1/2*g*delta_t^2
-    #           vx_{t+1} = vx_t + delta_t*w_x(t) 
-    #           vy_{t+1} = vy_t + delta_t*w_y(t) -g*delta_t
+    #           px_{t+1} = px_t + ??
+    #           py_{t+1} = py_t + ??
+    #           vx_{t+1} = vx_t + ?? 
+    #           vy_{t+1} = vy_t + ??
     #
     # Define:  
     #           x_t = [px_t; py_t; vx_t; vy_t]    (4x1 vector)
@@ -48,31 +52,31 @@ if __name__ == "__main__":
     # 
     #           x_{t+1} = Ax_t + Bu_t + Gw_t
     #
-    #           A = [1  0 delta_t  0; 0  1 0 delta_t; 0 0 1 0; 0 0 0 1]
-    #           B = I
-    #           u_t = [0; -1/2g*delta_t^2; 0; -g*delta_t]
-    #           G = [1/2*delta_t^2  0; 0  1/2*delta_t^2; delta_t 0; 0 delta_t]
+    #           A = ??
+    #           B = ??
+    #           u_t = ??
+    #           G = ??
     #            
     #
     # Suppose we measure position with noise. Then:
     #
-    #           z_t = [1 0 0 0; 0 1 0 0] * x_t + n_t  where n_t ~ N([0; 0], sigma_n^2 * I) 
+    #           z_t = H * x_t + n_t  where n_t ~ N([0; 0], sigma_n^2 * I) 
     #
     
-    delta_t = 0.1 # predictions are going to be made for 0.5 seconds in the future
+    delta_t = 0.1 # predictions are going to be made for 0.1 seconds in the future
     g = 9.81
     
-    A = np.array([[1, 0, delta_t, 0], [0,  1, 0, delta_t], [0, 0, 1, 0], [0, 0, 0, 1]])
-    B = np.identity(4)
-    G = np.array([[delta_t**2/2, 0], [0, delta_t**2/2], [delta_t, 0], [0, delta_t]])
-    H = np.array([[1, 0, 0, 0], [0, 1, 0, 0]])
+    A = # TODO
+    B = # TODO
+    G = # TODO
+    H = # TODO
 
     sigma_w = 0.1  # standard deviation of position prediction noise for one time step of dt seconds
-    Q = (sigma_w**2) * np.identity(2)
+    Q = # TODO
 
     sigma_n = 0.2  # standard deviation of position measurement noise
-    R = (sigma_n**2) * np.identity(2)
-
+    R = # TODO
+    
     sigma_p = 3 # uncertainty about initial position
     sigma_v = 3  # uncertainty about initial velocity
     Sigma_init = np.array([[sigma_p**2, 0, 0, 0],
@@ -82,7 +86,7 @@ if __name__ == "__main__":
 
     x_init = np.array([[0, 2, 2, 5]]).transpose() 
     kf = KalmanFilter(A, B, G, H, Q, R, x_init, Sigma_init)
-    u = np.array([[0, -0.5*g*delta_t**2, 0, -g*delta_t]]).transpose()
+    u = # TODO
     
     x_estimated = [x_init]
     cov_estimated = [Sigma_init]

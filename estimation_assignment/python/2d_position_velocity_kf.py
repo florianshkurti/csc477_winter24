@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/python3
+
 from kalman_filter import KalmanFilter
 import numpy as np
 
@@ -32,35 +33,39 @@ def plot_mean_and_covariance(mean, Sigma):
     
 if __name__ == "__main__":
 
+
+    # TODO: write down below the discrete-time dynamics for the point robot
+    # Assume delta_t is the resolution of each timestep
+    # Consult with the examples shown in the Kalman Filter lecture slides
     
     # Discrete dynamics:
-    #           p_{t+1} = p_t + delta_t*v_t + w_x(t)
-    #           v_{t+1} = v_t + w_y(t)
+    #           p_{t+1} = p_t + ??
+    #           v_{t+1} = v_t + ??
     #
     # Define:  
     #           x_t = [p_t; v_t]    (2x1 vector)
     #           w_t = [w_x(t); w_y(t)]   where w_t ~ N([0; 0], sigma_w^2 * I)
     # 
-    #           x_{t+1} = [1  delta_t; 0  1]*x_t + w_t
+    #           x_{t+1} = ??
     #
     # Suppose we measure position with noise. Then:
     #
-    #           z_t = [1 0] * x_t + n_t  where n_t ~ N([0; 0], sigma_n^2 * I) 
+    #           z_t = H * x_t + n_t  where n_t ~ N([0; 0], sigma_n^2 * I) 
     #
     
     delta_t = 0.5 # predictions are going to be made for 0.5 seconds in the future
 
-    A = np.array([[1, delta_t], [0,  1]])
-    B = np.zeros((2, 2))
-    G = np.identity(2)
-    H = np.array([[1, 0]])
+    A = # TODO 
+    B = # TODO
+    G = # TODO
+    H = # TODO
 
     sigma_w = 0.1  # 10cm = standard deviation of position prediction noise for one time step of dt seconds
-    Q = (sigma_w**2) * np.identity(2)
-
+    Q = # TODO
+    
     sigma_n = 0.2  # 20cm = standard deviation of position measurement noise
-    R = (sigma_n**2) * np.identity(1)
-
+    R = # TODO
+    
     x_init = np.array([[0, 5]]).transpose()
 
     sigma_p = 1 # 10cm = uncertainty about initial position
